@@ -15,7 +15,7 @@ public class NativeKafkaProducer {
 	public NativeKafkaProducer() {
 	}
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 
 		// kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic new_test_topic
 		// Creating propereties for kafka Producer.
@@ -28,8 +28,10 @@ public class NativeKafkaProducer {
 		KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(properties);
 
 		// sending data to a topic .
-		for (int i = 0; i < 100; i++)
-			kafkaProducer.send(new ProducerRecord<String, String>(TOPIC, "From Java Native Producer Message: " + i));
+		for (int i = 0; i < 1000; i++) {
+			Thread.sleep(2000);
+			kafkaProducer.send(new ProducerRecord<String, String>(TOPIC,  "From Java Native Producer Message: " + i));
+		}
 
 		// closing and flushing out producer .
 		kafkaProducer.close();
