@@ -33,13 +33,13 @@ public class NativeKafkaConsumer {
 		consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID_CONFIG);
 
 		// creating kafka consumer .
-		KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(consumerConfigs);
+		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfigs);
 
 		// subscribing kafka consumer to a topic
-		kafkaConsumer.subscribe(Collections.singletonList(TOPIC));
+		consumer.subscribe(Collections.singletonList(TOPIC));
 
 		while (true) {
-			ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(100));
+			ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 
 			for (ConsumerRecord record : records) {
 				System.out.println("topic : " + record.topic() + "\n");
