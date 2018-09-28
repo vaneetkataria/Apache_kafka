@@ -31,3 +31,4 @@ nohup.out
 build-all.sh
 nohup.out
 hs_*
+/target
