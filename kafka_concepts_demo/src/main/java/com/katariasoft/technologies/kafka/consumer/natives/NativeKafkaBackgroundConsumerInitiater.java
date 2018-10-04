@@ -1,4 +1,4 @@
-package com.katariasoft.technologies.kafka.consumer;
+package com.katariasoft.technologies.kafka.consumer.natives;
 
 import java.util.Collections;
 import java.util.Properties;

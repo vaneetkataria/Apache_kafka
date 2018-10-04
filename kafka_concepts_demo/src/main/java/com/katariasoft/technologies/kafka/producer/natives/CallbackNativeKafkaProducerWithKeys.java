@@ -1,4 +1,4 @@
-package com.katariasoft.technologies.kafka.producer;
+package com.katariasoft.technologies.kafka.producer.natives;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
