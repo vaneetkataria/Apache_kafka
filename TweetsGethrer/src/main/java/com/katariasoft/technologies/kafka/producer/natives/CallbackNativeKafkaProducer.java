@@ -9,15 +9,58 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-public class CallbackNativeKafkaProducer {
+public class CallbackNativeKafkaProducer<K, V> {
 
-	private static final String TOPIC = "new_test_topic";
-	private static final String BOOTSTRAP_SERVERS_CONFIG = "127.0.0.1:9092";
+	private Properties configs;
+	private String topic;
+	private KafkaProducer<K, V> kafkaProducer;
 
 	public CallbackNativeKafkaProducer() {
 	}
 
+	public CallbackNativeKafkaProducer(Properties configs, String topic) {
+		assertInitiatable(configs, topic);
+		this.configs = configs;
+		this.topic = topic;
+		kafkaProducer = new KafkaProducer<>(configs);
+	}
+
+	public void send(K key, V value) {
+		ProducerRecord<K, V> producerRecord = new ProducerRecord<>(topic, key, value);
+		kafkaProducer.send(producerRecord, new Callback() {
+
+			@Override
+			public void onCompletion(RecordMetadata metadata, Exception exception) {
+
+				if (exception != null)
+					exception.printStackTrace();
+				else {
+					System.out.println("Topic:" + metadata.topic() + "\n");
+					System.out.println("Partition:" + metadata.partition() + "\n");
+					System.out.println("Offset:" + metadata.offset() + "\n");
+					System.out.println("TimeStamp:" + metadata.timestamp() + "\n");
+					System.out.println("+++++");
+				}
+			}
+		});
+	}
+
+	public void close() {
+		kafkaProducer.flush();
+		kafkaProducer.close();
+	}
+
+	private void assertInitiatable(Properties kafkaConfigs, String kafkaTopic) {
+		if (kafkaConfigs == null || kafkaConfigs.isEmpty() || kafkaTopic == null || kafkaTopic.isEmpty())
+			throw new RuntimeException(
+					"Cannot create LiveTwitterStreamToKafkaForwarder . Configs and topics must be defined. ");
+	}
+
+	// for testing purpose only
 	public static void main(String args[]) throws InterruptedException {
+
+		String TOPIC = "new_test_topic";
+		String BOOTSTRAP_SERVERS_CONFIG = "127.0.0.1:9092";
 
 		// kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic new_test_topic
 		// Creating properties for kafka Producer.

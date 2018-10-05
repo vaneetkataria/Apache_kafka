@@ -5,6 +5,7 @@
 	<artifactId>kafka-concepts-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<!-- Kafka Client dependency -->
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
@@ -12,11 +13,21 @@
 			<version>2.0.0</version>
 		</dependency>
 
+		<!-- Slf4J dependency -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.25</version>
 		</dependency>
+
+
+		<!-- Twitter client dependency -->
+		<dependency>
+			<groupId>com.twitter</groupId>
+			<artifactId>hbc-core</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
 
 	</dependencies>
 
