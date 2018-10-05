@@ -16,6 +16,7 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 			kafkaProducer = new CallbackNativeKafkaProducer<>(kafkaConfigs, kafkaTopic);
 		} catch (Exception e) {
 			System.out.println("Exception occured while initiating LiveTwitterStreamToKafkaForwarder .");
+			stop();
 			throw new RuntimeException("LiveTwitterStreamToKafkaForwarder could not be created because of exception . ",
 					e);
 		}
@@ -28,8 +29,10 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 	}
 
 	public void stop() {
-		liveTweetsStreamClient.closeClient();
-		kafkaProducer.close();
+		if (liveTweetsStreamClient != null)
+			liveTweetsStreamClient.closeClient();
+		if (kafkaProducer != null)
+			kafkaProducer.close();
 	}
 
 	public void forwardLiveTwitterStreamToKafka() {
@@ -38,16 +41,21 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 			tweetNumber++;
 			try {
 				String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
-				kafkaProducer.send(String.valueOf(tweetNumber), message);
-			} catch (InterruptedException e) {
-				System.out.println("Exception occured while polling live data from queue. Stopping stream forwarding.");
-				stop();
-				throw new RuntimeException(
-						"Exception occured while polling live data from queue. Stopping stream forwarding.", e);
+				if (message != null)
+					kafkaProducer.send(String.valueOf(tweetNumber), message);
+			} catch (Exception e) {
+				handleExceptionGenrecally(e);
 			}
 
 		}
 
+	}
+
+	private void handleExceptionGenrecally(Exception e) {
+		System.out.println("Exception occured while polling live data from queue. Stopping stream forwarding.");
+		stop();
+		throw new RuntimeException("Exception occured while polling live data from queue. Stopping stream forwarding.",
+				e);
 	}
 
 	private void assertFunctionalble() {

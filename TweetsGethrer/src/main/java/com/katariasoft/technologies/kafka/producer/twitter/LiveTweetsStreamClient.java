@@ -19,7 +19,7 @@ class LiveTweetsStreamClient {
 	// It should have size as per memory and live data coming .
 	private BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
 	// These term list should be coming from a externalised properties.
-	private List<String> terms = Lists.newArrayList("avengers", "hulk", "ironman", "captain america", "black panther");
+	private List<String> terms = Lists.newArrayList("Vaneet");
 	// twitter client
 	private Client hosebirdClient;
 

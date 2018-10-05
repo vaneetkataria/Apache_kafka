@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 public class LiveTweetsStreamKafkaProducer {
 
 	private static String BOOTSTRAP_SERVERS_CONFIG = "127.0.0.1:9092";
-	private static String TOPIC = "new_test_topic";
+	private static String TOPIC = "twitterstream";
 	private static Properties kafkaConfigs;
 
 	static {
@@ -41,7 +41,7 @@ public class LiveTweetsStreamKafkaProducer {
 		streamForwarder.forward();
 	}
 
-	public static void main() {
+	public static void main(String args[]) {
 		try {
 			new LiveTweetsStreamKafkaProducer(kafkaConfigs, TOPIC).produce();
 		} catch (Exception e) {
