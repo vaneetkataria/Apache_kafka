@@ -30,6 +30,7 @@ public class LiveTweetsStreamKafkaProducer {
 	public LiveTweetsStreamKafkaProducer(Properties kafkaConfigs, String kafkaTopic, List<String> tweetTerms) {
 		try {
 			streamForwarder = new LiveTweetsStreamKafkaForwarder(kafkaConfigs, kafkaTopic, tweetTerms);
+			addShutDownHook();
 		} catch (Exception e) {
 			System.out.println(
 					"Exception occured while creating  LiveTwitterStreamKafkaProducer throwing exception with cause.");
@@ -41,6 +42,19 @@ public class LiveTweetsStreamKafkaProducer {
 
 	public void produce() {
 		streamForwarder.forward();
+	}
+
+	private void addShutDownHook() {
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("Going to stop application with Kafka producer and twitter client.");
+				streamForwarder.stop();
+				System.out.println("Application exited successfully.");
+			}
+		}));
+
 	}
 
 	public static void main(String args[]) {
