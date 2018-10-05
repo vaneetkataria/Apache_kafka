@@ -25,8 +25,8 @@ public class CallbackNativeKafkaProducer<K, V> {
 		kafkaProducer = new KafkaProducer<>(configs);
 	}
 
-	public void send(K key, V value) {
-		ProducerRecord<K, V> producerRecord = new ProducerRecord<>(topic, key, value);
+	public void send(V value) {
+		ProducerRecord<K, V> producerRecord = new ProducerRecord<>(topic, value);
 		kafkaProducer.send(producerRecord, new Callback() {
 
 			@Override

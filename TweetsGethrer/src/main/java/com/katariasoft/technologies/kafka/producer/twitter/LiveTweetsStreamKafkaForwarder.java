@@ -37,13 +37,11 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 	}
 
 	public void forwardLiveTwitterStreamToKafka() {
-		int tweetNumber = 0;
 		while (!liveTweetsStreamClient.isDone()) {
-			tweetNumber++;
 			try {
 				String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
 				if (message != null)
-					kafkaProducer.send(String.valueOf(tweetNumber), message);
+					kafkaProducer.send(message);
 			} catch (Exception e) {
 				handleExceptionGenrecally(e);
 			}
