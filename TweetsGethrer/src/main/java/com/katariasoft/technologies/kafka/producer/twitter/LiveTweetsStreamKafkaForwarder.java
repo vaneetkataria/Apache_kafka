@@ -1,5 +1,6 @@
 package com.katariasoft.technologies.kafka.producer.twitter;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -10,9 +11,9 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 	private LiveTweetsStreamClient liveTweetsStreamClient;
 	private CallbackNativeKafkaProducer<String, String> kafkaProducer;
 
-	public LiveTweetsStreamKafkaForwarder(Properties kafkaConfigs, String kafkaTopic) {
+	public LiveTweetsStreamKafkaForwarder(Properties kafkaConfigs, String kafkaTopic, List<String> tweetTerms) {
 		try {
-			liveTweetsStreamClient = new LiveTweetsStreamClient();
+			liveTweetsStreamClient = new LiveTweetsStreamClient(tweetTerms);
 			kafkaProducer = new CallbackNativeKafkaProducer<>(kafkaConfigs, kafkaTopic);
 		} catch (Exception e) {
 			System.out.println("Exception occured while initiating LiveTwitterStreamToKafkaForwarder .");

@@ -18,8 +18,7 @@ class LiveTweetsStreamClient {
 
 	// It should have size as per memory and live data coming .
 	private BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
-	// These term list should be coming from a externalised properties.
-	private List<String> terms = Lists.newArrayList("Vaneet");
+
 	// twitter client
 	private Client hosebirdClient;
 
@@ -29,12 +28,11 @@ class LiveTweetsStreamClient {
 	private static final String token = "607179133-AdBA9k6wsihxpX8210Xd0YJovSK8D8BaT0N37hsA";
 	private static final String secret = "NL7chMgrKbiFCfUSZA5bHFvdtA9lFJWGIuaj1NHGsF19M";
 
-	LiveTweetsStreamClient() {
-
+	LiveTweetsStreamClient(List<String> tweetTerms) {
 		try {
 			Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
 			StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
-			hosebirdEndpoint.trackTerms(terms);
+			hosebirdEndpoint.trackTerms(tweetTerms);
 
 			ClientBuilder builder = new ClientBuilder().name("TweetsGetherer").hosts(hosebirdHosts)
 					.authentication(new OAuth1(consumerKey, consumerSecret, token, secret)).endpoint(hosebirdEndpoint)
