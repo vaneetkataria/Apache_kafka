@@ -85,11 +85,26 @@ public class TweetsGethrerKafkaProducerConfig {
 		// increased max block ms to 80000 ms form 60000 ms to make more hope of putting
 		// data into producer buffer.
 		kafkaConfigs.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 80000);
-
+		// ##
+		// Increased buffer memory to 44 MB from 32 MB to support more data to be
+		// collected in buffer
+		// to support less data loss .
+		kafkaConfigs.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 44 * 1024 * 1024);
+		// ##
+		// Wait for 20 ms at least to send data to kafka if 32 kb batch is not filled.
+		kafkaConfigs.put(ProducerConfig.LINGER_MS_CONFIG, 0);
+		// ##
+		// Has increased batch size to 32 kb . If 32 kb is filled before 20 ms then
+		// compression will be really good for this size. To increase high throughput
+		// batch size has been increased.
+		kafkaConfigs.put(ProducerConfig.BATCH_SIZE_CONFIG, 64 * 1024);
 		// ##
 		// How many retries should a producer do . For high consistency and durability
 		// set it to Max integer value.
 		kafkaConfigs.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
+		// ##
+		// decreased retry time to 70 ms instead of 100 ms
+		kafkaConfigs.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 70);
 		// ##
 		// acks can have value in
 		// 1. [0(No acknowledgement of requesr received from cluster][High throghput and
@@ -114,16 +129,24 @@ public class TweetsGethrerKafkaProducerConfig {
 		// time.
 		kafkaConfigs.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
 		// ##
+		// Increased max request size to 2 MB instead of 1 MB.
+		//
+		kafkaConfigs.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, 2 * 1024 * 1024);
+		// ##
 		// compression can be snappy lz4 or gzip .
 		kafkaConfigs.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
-		// ##
-		// Wait for 20 ms at least to send data to kafka if 32 kb batch is not filled.
-		kafkaConfigs.put(ProducerConfig.LINGER_MS_CONFIG, 0);
-		// ##
-		// Has increased batch size to 32 kb . If 32 kb is filled before 20 ms then
-		// compression will be really good for this size. To increase high throughput
-		// batch size has been increased.
-		kafkaConfigs.put(ProducerConfig.BATCH_SIZE_CONFIG, 16 * 1024);
+
+		// maximum time of wait for next reconnect attempt.
+		kafkaConfigs.put(ProducerConfig.RECONNECT_BACKOFF_MAX_MS_CONFIG, 2000);
+		// how much time to wait to try reconnect to broker if conncetion was refused
+		// for the first time .
+		// after that reconect back off time will keep on increasing upto
+		// RECONNECT_BACKOFF_MAX_MS_CONFIG
+		kafkaConfigs.put(ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG, 50);
+
+		// Maximum time to wait for request to be timeout . 40000 ms instead of 30000
+		// ms.
+		kafkaConfigs.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 40000);
 
 		return kafkaConfigs;
 

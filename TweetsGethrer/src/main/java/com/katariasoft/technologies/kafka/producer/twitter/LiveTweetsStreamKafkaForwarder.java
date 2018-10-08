@@ -40,7 +40,7 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 		while (!liveTweetsStreamClient.isDone()) {
 			try {
 				String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
-				if (message != null)
+				/*if (message != null)*/
 					kafkaProducer.send(message);
 			} catch (Exception e) {
 				handleExceptionGenrecally(e);
