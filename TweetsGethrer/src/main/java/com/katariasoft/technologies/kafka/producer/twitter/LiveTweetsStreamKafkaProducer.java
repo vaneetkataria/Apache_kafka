@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
-
 import com.katariasoft.technologies.kafka.producer.twitter.broker.config.TweetsGethrerKafkaProducerConfig;
 
 public class LiveTweetsStreamKafkaProducer {
