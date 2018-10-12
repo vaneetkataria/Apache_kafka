@@ -1,12 +1,15 @@
-package com.katariasoft.technologies.kafka.producer.twitter;
+package com.katariasoft.technologies.kafka.producer.twitter.producer.helper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import com.katariasoft.technologies.kafka.producer.natives.CallbackNativeKafkaProducer;
+import com.katariasoft.technologies.kafka.producer.twitter.stream.client.LiveTweetsStreamClient;
+import com.katariasoft.technologies.kafka.producer.util.Assert;
 
-class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
+public class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 
 	private LiveTweetsStreamClient liveTweetsStreamClient;
 	private CallbackNativeKafkaProducer<String, String> kafkaProducer;
@@ -25,14 +28,15 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 
 	@Override
 	public void forward() {
-		assertFunctionalble();
+		Assert.nonNull("LiveTwitterStreamToKafkaForwarder not functionable as not initialised properly.",
+				liveTweetsStreamClient, kafkaProducer);
 		forwardLiveTwitterStreamToKafka();
 	}
 
 	public void stop() {
-		if (liveTweetsStreamClient != null)
+		if (Objects.nonNull(liveTweetsStreamClient))
 			liveTweetsStreamClient.closeClient();
-		if (kafkaProducer != null)
+		if (Objects.nonNull(kafkaProducer))
 			kafkaProducer.close();
 	}
 
@@ -40,8 +44,8 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 		while (!liveTweetsStreamClient.isDone()) {
 			try {
 				String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
-				/*if (message != null)*/
-					kafkaProducer.send(message);
+				/* if (message != null) */
+				kafkaProducer.send(message);
 			} catch (Exception e) {
 				handleExceptionGenrecally(e);
 			}
@@ -56,12 +60,4 @@ class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 		throw new RuntimeException("Exception occured while polling live data from queue. Stopping stream forwarding.",
 				e);
 	}
-
-	private void assertFunctionalble() {
-		if (liveTweetsStreamClient == null || kafkaProducer == null)
-			throw new RuntimeException(
-					"LiveTwitterStreamToKafkaForwarder not functionable as not initialised properly. ");
-
-	}
-
 }

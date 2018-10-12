@@ -1,4 +1,4 @@
-package com.katariasoft.technologies.kafka.producer.twitter.broker.config;
+package com.katariasoft.technologies.kafka.producer.twitter.producer.config;
 
 import java.util.Properties;
 

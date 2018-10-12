@@ -1,10 +1,11 @@
-package com.katariasoft.technologies.kafka.producer.twitter;
+package com.katariasoft.technologies.kafka.producer.twitter.producer;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import com.katariasoft.technologies.kafka.producer.twitter.broker.config.TweetsGethrerKafkaProducerConfig;
+import com.katariasoft.technologies.kafka.producer.twitter.producer.config.TweetsGethrerKafkaProducerConfig;
+import com.katariasoft.technologies.kafka.producer.twitter.producer.helper.LiveTweetsStreamKafkaForwarder;
 
 public class LiveTweetsStreamKafkaProducer {
 

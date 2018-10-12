@@ -1,4 +1,4 @@
-package com.katariasoft.technologies.kafka.producer.twitter;
+package com.katariasoft.technologies.kafka.producer.twitter.stream.client;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -14,13 +14,7 @@ import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
-class LiveTweetsStreamClient {
-
-	// It should have size as per memory and live data coming .
-	private BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
-
-	// twitter client
-	private Client hosebirdClient;
+public class LiveTweetsStreamClient {
 
 	// secure static variables which should come from externalised properties.
 	private static final String consumerKey = "bxEgtETXvTBERJxqhIkUeko9t";
@@ -28,7 +22,12 @@ class LiveTweetsStreamClient {
 	private static final String token = "607179133-AdBA9k6wsihxpX8210Xd0YJovSK8D8BaT0N37hsA";
 	private static final String secret = "NL7chMgrKbiFCfUSZA5bHFvdtA9lFJWGIuaj1NHGsF19M";
 
-	LiveTweetsStreamClient(List<String> tweetTerms) {
+	// It should have size as per memory and live data coming .
+	private BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
+	// twitter client
+	private Client hosebirdClient;
+
+	public LiveTweetsStreamClient(List<String> tweetTerms) {
 		try {
 			Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
 			StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
@@ -48,15 +47,15 @@ class LiveTweetsStreamClient {
 
 	}
 
-	boolean isDone() {
+	public boolean isDone() {
 		return hosebirdClient.isDone();
 	}
 
-	BlockingQueue<String> getstreamingDataQueue() {
+	public BlockingQueue<String> getstreamingDataQueue() {
 		return msgQueue;
 	}
 
-	void closeClient() {
+	public void closeClient() {
 		hosebirdClient.stop();
 	}
 
