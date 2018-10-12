@@ -35,6 +35,7 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 			this.esIndex = esIndex;
 			this.esIndexType = esIndexType;
 		} catch (Exception e) {
+			stop();
 			KafkaConsumerException
 					.instance("Exception occured while creating LiveTweetsStreamKafkaToElasticSearchForwarder .", e);
 
