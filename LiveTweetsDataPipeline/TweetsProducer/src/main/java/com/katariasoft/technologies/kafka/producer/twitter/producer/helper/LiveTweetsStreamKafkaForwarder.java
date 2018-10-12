@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import com.katariasoft.technologies.kafka.producer.exception.KafkaProducerException;
 import com.katariasoft.technologies.kafka.producer.natives.CallbackNativeKafkaProducer;
 import com.katariasoft.technologies.kafka.producer.twitter.stream.client.LiveTweetsStreamClient;
 import com.katariasoft.technologies.kafka.producer.util.Assert;
@@ -21,8 +22,8 @@ public class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 		} catch (Exception e) {
 			System.out.println("Exception occured while initiating LiveTwitterStreamToKafkaForwarder .");
 			stop();
-			throw new RuntimeException("LiveTwitterStreamToKafkaForwarder could not be created because of exception . ",
-					e);
+			throw KafkaProducerException
+					.instance("LiveTwitterStreamToKafkaForwarder could not be created because of exception . ", e);
 		}
 	}
 
@@ -57,7 +58,7 @@ public class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 	private void handleExceptionGenrecally(Exception e) {
 		System.out.println("Exception occured while polling live data from queue. Stopping stream forwarding.");
 		stop();
-		throw new RuntimeException("Exception occured while polling live data from queue. Stopping stream forwarding.",
-				e);
+		throw KafkaProducerException
+				.instance("Exception occured while polling live data from queue. Stopping stream forwarding.", e);
 	}
 }
