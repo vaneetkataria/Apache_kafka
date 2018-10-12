@@ -42,8 +42,7 @@ public class LiveTweetsStreamClient {
 			hosebirdClient.connect();
 		} catch (Exception e) {
 			System.out.println("Could not create LiveTweetsStreamClient as some exception occured while creating it. ");
-			throw KafkaProducerException.instance(
-					"Could not create LiveTweetsStreamClient as some exception occured while creating it. ", e);
+			throw e;
 		}
 
 	}

@@ -43,22 +43,20 @@ public class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 
 	public void forwardLiveTwitterStreamToKafka() {
 		while (!liveTweetsStreamClient.isDone()) {
-			try {
-				String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
-				/* if (message != null) */
-				kafkaProducer.send(message);
-			} catch (Exception e) {
-				handleExceptionGenrecally(e);
-			}
-
+			processSingleDataSnapshot();
 		}
-
 	}
 
-	private void handleExceptionGenrecally(Exception e) {
-		System.out.println("Exception occured while polling live data from queue. Stopping stream forwarding.");
-		stop();
-		throw KafkaProducerException
-				.instance("Exception occured while polling live data from queue. Stopping stream forwarding.", e);
+	private void processSingleDataSnapshot() {
+		try {
+			String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
+			if (Objects.nonNull(message))
+				kafkaProducer.send(message);
+		} catch (Exception e) {
+			System.err
+					.println("Exception occured while polling live data from queue. Processing next batch of records");
+			e.printStackTrace();
+		}
 	}
+
 }

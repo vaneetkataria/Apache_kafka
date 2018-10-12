@@ -2,6 +2,7 @@ package com.katariasoft.technologies.kafka.consumer.natives;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -20,6 +21,50 @@ public class AssignAndSeekKafkaConsumer {
 	private static final String REAL_TIME_ONLY = "latest";
 
 	public static void main(String args[]) {
+		
+/*		public static void main(String args[]) {
+
+			String TOPIC = "new_test_topic";
+			String BOOTSTRAP_SERVERS_CONFIG = "127.0.0.1:9092";
+			String GROUP_ID_CONFIG = "javacode";
+			String FROM_BEGINNING = "earliest";
+			
+
+			// kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092
+			// --group javaCode --topic new_test_topic --from-beginning
+
+			// creating kafka consumer configs
+			Properties consumerConfigs = new Properties();
+			consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
+			consumerConfigs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+			consumerConfigs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+			// --from-beginning
+			consumerConfigs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, FROM_BEGINNING);
+			consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID_CONFIG);
+
+			// creating kafka consumer .
+			KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfigs);
+
+			// subscribing kafka consumer to a topic
+			consumer.subscribe(Collections.singletonList(TOPIC));
+
+			while (true) {
+				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+
+				for (ConsumerRecord record : records) {
+					System.out.println("topic : " + record.topic() + "\n");
+					System.out.println("partition : " + record.partition() + "\n");
+					System.out.println("Key : " + record.key() + "\n");
+					System.out.println("Value : " + record.value() + "\n");
+					System.out.println("timestamp : " + record.timestamp() + "\n");
+					System.out.println("++++++++");
+
+				}
+			}
+
+		}*/
+
+
 
 		// kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092
 		// --group javaCode --topic new_test_topic --from-beginning

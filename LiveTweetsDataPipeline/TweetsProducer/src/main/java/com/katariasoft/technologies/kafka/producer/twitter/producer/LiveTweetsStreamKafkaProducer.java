@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import com.katariasoft.technologies.kafka.producer.exception.KafkaProducerException;
 import com.katariasoft.technologies.kafka.producer.twitter.producer.config.TweetsGethrerKafkaProducerConfig;
 import com.katariasoft.technologies.kafka.producer.twitter.producer.helper.LiveTweetsStreamKafkaForwarder;
 
@@ -32,7 +33,7 @@ public class LiveTweetsStreamKafkaProducer {
 		} catch (Exception e) {
 			System.out.println(
 					"Exception occured while creating  LiveTwitterStreamKafkaProducer throwing exception with cause.");
-			throw new RuntimeException(
+			throw KafkaProducerException.instance(
 					"Exception occured while creating  LiveTwitterStreamKafkaProducer throwing exception with cause.",
 					e);
 		}

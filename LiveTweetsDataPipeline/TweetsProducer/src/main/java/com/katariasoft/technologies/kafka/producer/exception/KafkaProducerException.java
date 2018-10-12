@@ -26,14 +26,10 @@ public class KafkaProducerException extends RuntimeException {
 	}
 
 	public static KafkaProducerException instance(String message, Throwable throwable) {
-		if (Objects.nonNull(message) && Objects.nonNull(throwable))
-			return new KafkaProducerException(message, throwable);
-		if (Objects.nonNull(message))
-			return new KafkaProducerException(message);
-		if (Objects.nonNull(throwable))
-			return new KafkaProducerException(throwable);
-		else
-			return new KafkaProducerException();
+		return (Objects.nonNull(message) && Objects.nonNull(throwable)) ? new KafkaProducerException(message, throwable)
+				: (Objects.nonNull(message)) ? new KafkaProducerException(message)
+						: (Objects.nonNull(throwable)) ? new KafkaProducerException(throwable)
+								: new KafkaProducerException();
 	}
 
 }
