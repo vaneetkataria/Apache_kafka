@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.errors.InterruptException;
 import org.apache.kafka.common.errors.WakeupException;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -55,11 +56,16 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 	private void processSingleDataBatch() {
 		try {
 			ConsumerRecords<K, V> consumerRecords = nativeKafkaConsumer.poll(100);
-			for (ConsumerRecord<K, V> record : consumerRecords) {
-				logConsumedData(record);
-				if (Objects.nonNull(record)) {
-					forwardToElasticSearch(record);
+			if (Objects.nonNull(consumerRecords) && !consumerRecords.isEmpty()) {
+				BulkRequest bulkRequest = new BulkRequest();
+				for (ConsumerRecord<K, V> record : consumerRecords) {
+					logConsumedData(record);
+					if (Objects.nonNull(record)) {
+						addToBulkRequest(record, bulkRequest);
+					}
 				}
+				if (forwardToElasticSearch(bulkRequest))
+					nativeKafkaConsumer.commitSync();
 			}
 		} catch (WakeupException | InterruptException e) {
 			System.err.println(
@@ -87,14 +93,26 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 		}
 	}
 
-	private void forwardToElasticSearch(ConsumerRecord<K, V> record) {
+	private void addToBulkRequest(ConsumerRecord<K, V> record, BulkRequest bulkRequest) {
+		IndexRequest request = new IndexRequest(esIndex, esIndexType);
+		// To make consumer idempotent . As after processing completed data and just
+		// before committing offset if consumer died and when new consumer will be
+		// poll this data again (As offsets were not committed by old consumer )then
+		// duplication of data should not happen in elastic
+		// search.
+		request.id(record.topic() + "_" + record.partition() + "_" + record.offset());
+		request.source(record.value(), XContentType.JSON);
+		bulkRequest.add(request);
+	}
+
+	private boolean forwardToElasticSearch(BulkRequest bulkRequest) {
 		try {
-			IndexRequest request = new IndexRequest(esIndex, esIndexType);
-			request.source(record.value(), XContentType.JSON);
-			elasticSerachClient.index(request, RequestOptions.DEFAULT);
+			elasticSerachClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+			return true;
 		} catch (IOException e) {
 			System.err.println("IO Exception occured while creating index in elastic search cluster.");
 			e.printStackTrace();
+			return false;
 		}
 	}
 

@@ -27,4 +27,9 @@ public class NativeKafkaConsumer<K, V> {
 		kafkaConsumer.close();
 	}
 
+	public void commitSync() {
+		kafkaConsumer.commitSync();
+		;
+	}
+
 }
