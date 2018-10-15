@@ -11,11 +11,8 @@ public class LiveTweetsStreamKafkaConsumerConfig {
 	private static String GROUP_ID_CONFIG = "javacode";
 
 	public static Properties get() {
-
 		// kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092
 		// --group javaCode --topic new_test_topic --from-beginning
-
-		// creating kafka consumer configs
 		Properties consumerConfigs = new Properties();
 		consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
 		consumerConfigs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -47,8 +44,8 @@ public class LiveTweetsStreamKafkaConsumerConfig {
 		// At least 2048 bytes should be present on server to return the response other
 		// wise consumer will wait .
 		// This will improve throughput at cost of some latency.
-		consumerConfigs.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 2048);
-		// this much milli seconds server will wait to send empty data if
+		consumerConfigs.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 2 * 1024);
+		// this much milliseconds server will wait to send empty data if
 		// FETCH_MIN_BYTES_CONFIG requirement is not fulfilled .
 		consumerConfigs.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 2000);
 		// Max 2 MB will be returned from single partition in one poll.
