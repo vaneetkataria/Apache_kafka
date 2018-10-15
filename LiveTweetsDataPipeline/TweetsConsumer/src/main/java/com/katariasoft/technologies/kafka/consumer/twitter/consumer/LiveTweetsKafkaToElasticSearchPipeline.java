@@ -9,8 +9,8 @@ import com.katariasoft.technologies.kafka.consumer.util.Assert;
 public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
 
 	private static final String TOPIC = "twitterstream";
-	private static final String eSIndex = "twitter";
-	private static final String eSIndexType = "tweets";
+	private static final String ES_INDEX = "twitter";
+	private static final String ES_INDEX_TYPE = "tweets";
 
 	private LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> forwarder;
 	private Properties kafkaConfigs;
@@ -28,8 +28,8 @@ public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
 		this.topic = topic;
 		this.esIndex = esIndex;
 		this.esIndexType = esIndex;
-		forwarder = new LiveTweetsStreamKafkaToElasticSearchForwarder<>(
-				LiveTweetsStreamKafkaConsumerConfig.get(), topic, esIndex, esIndexType);
+		forwarder = new LiveTweetsStreamKafkaToElasticSearchForwarder<>(LiveTweetsStreamKafkaConsumerConfig.get(),
+				topic, esIndex, esIndexType);
 	}
 
 	public void start() {
@@ -39,7 +39,7 @@ public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
 	public static void main(String args[]) {
 		try {
 			LiveTweetsKafkaToElasticSearchPipeline<String, String> pipeline = new LiveTweetsKafkaToElasticSearchPipeline<>(
-					LiveTweetsStreamKafkaConsumerConfig.get(), TOPIC, eSIndex, eSIndexType);
+					LiveTweetsStreamKafkaConsumerConfig.get(), TOPIC, ES_INDEX, ES_INDEX_TYPE);
 			pipeline.start();
 		} catch (Exception e) {
 			e.printStackTrace();

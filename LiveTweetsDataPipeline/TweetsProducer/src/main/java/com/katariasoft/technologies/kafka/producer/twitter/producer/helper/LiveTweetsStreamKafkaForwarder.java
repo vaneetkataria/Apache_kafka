@@ -20,7 +20,7 @@ public class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 			liveTweetsStreamClient = new LiveTweetsStreamClient(tweetTerms);
 			kafkaProducer = new CallbackNativeKafkaProducer<>(kafkaConfigs, kafkaTopic);
 		} catch (Exception e) {
-			System.out.println("Exception occured while initiating LiveTwitterStreamToKafkaForwarder .");
+			System.err.println("Exception occured while initiating LiveTwitterStreamToKafkaForwarder .");
 			stop();
 			throw KafkaProducerException
 					.instance("LiveTwitterStreamToKafkaForwarder could not be created because of exception . ", e);
