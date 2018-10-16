@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.errors.InterruptException;
 import org.apache.kafka.common.errors.WakeupException;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -19,6 +20,12 @@ import com.katariasoft.technologies.kafka.consumer.natives.NativeKafkaConsumer;
 import com.katariasoft.technologies.kafka.consumer.twitter.elasticsearch.client.ElasticSerachClientProvider;
 import com.katariasoft.technologies.kafka.consumer.util.Assert;
 
+/**
+ * @author YATRAONLINE\vaneet.kumar
+ *
+ * @param <K>
+ * @param <V>
+ */
 public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements StreamForwarder {
 
 	private NativeKafkaConsumer<K, V> nativeKafkaConsumer;
@@ -107,7 +114,7 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 
 	private boolean forwardToElasticSearch(BulkRequest bulkRequest) {
 		try {
-			elasticSerachClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+			BulkResponse response = elasticSerachClient.bulk(bulkRequest, RequestOptions.DEFAULT);
 			return true;
 		} catch (IOException e) {
 			System.err.println("IO Exception occured while creating index in elastic search cluster.");
@@ -119,6 +126,7 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 	private void logConsumedData(ConsumerRecord<K, V> record) {
 		System.out.println("topic : " + record.topic() + "\n");
 		System.out.println("partition : " + record.partition() + "\n");
+		System.out.println("offset: " + record.offset() + "\n");
 		System.out.println("Key : " + record.key() + "\n");
 		System.out.println("Value : " + record.value() + "\n");
 		System.out.println("timestamp : " + record.timestamp() + "\n");

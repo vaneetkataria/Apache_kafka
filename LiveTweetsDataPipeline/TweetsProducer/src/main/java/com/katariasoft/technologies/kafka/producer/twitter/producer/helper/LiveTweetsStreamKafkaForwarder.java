@@ -49,9 +49,11 @@ public class LiveTweetsStreamKafkaForwarder implements StreamForwarder {
 
 	private void processSingleDataSnapshot() {
 		try {
-			String message = liveTweetsStreamClient.getstreamingDataQueue().poll(5, TimeUnit.MILLISECONDS);
-			if (Objects.nonNull(message))
+			String message = liveTweetsStreamClient.getstreamingDataQueue().poll(2, TimeUnit.MILLISECONDS);
+			if (Objects.nonNull(message)) {
 				kafkaProducer.send(message);
+				//System.out.println("Record delivered to kafka producer at :" + System.currentTimeMillis());
+			}
 		} catch (Exception e) {
 			System.err
 					.println("Exception occured while polling live data from queue. Processing next batch of records");

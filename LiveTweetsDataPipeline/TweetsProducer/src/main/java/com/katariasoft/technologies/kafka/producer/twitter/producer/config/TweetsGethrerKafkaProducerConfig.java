@@ -84,7 +84,7 @@ public class TweetsGethrerKafkaProducerConfig {
 
 		// increased max block ms to 80000 ms form 60000 ms to make more hope of putting
 		// data into producer buffer.
-		kafkaConfigs.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 80000);
+		kafkaConfigs.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 8000);
 		// ##
 		// Increased buffer memory to 44 MB from 32 MB to support more data to be
 		// collected in buffer
@@ -92,12 +92,12 @@ public class TweetsGethrerKafkaProducerConfig {
 		kafkaConfigs.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 44 * 1024 * 1024);
 		// ##
 		// Wait for 20 ms at least to send data to kafka if 32 kb batch is not filled.
-		kafkaConfigs.put(ProducerConfig.LINGER_MS_CONFIG, 0);
+		kafkaConfigs.put(ProducerConfig.LINGER_MS_CONFIG, 1500);
 		// ##
 		// Has increased batch size to 32 kb . If 32 kb is filled before 20 ms then
 		// compression will be really good for this size. To increase high throughput
 		// batch size has been increased.
-		kafkaConfigs.put(ProducerConfig.BATCH_SIZE_CONFIG, 64 * 1024);
+		kafkaConfigs.put(ProducerConfig.BATCH_SIZE_CONFIG, 1024 * 1024);
 		// ##
 		// How many retries should a producer do . For high consistency and durability
 		// set it to Max integer value.

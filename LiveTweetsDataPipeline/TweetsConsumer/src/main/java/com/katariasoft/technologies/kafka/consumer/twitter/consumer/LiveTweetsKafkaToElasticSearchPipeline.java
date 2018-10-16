@@ -9,8 +9,8 @@ import com.katariasoft.technologies.kafka.consumer.util.Assert;
 public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
 
 	private static final String TOPIC = "twitterstream";
-	private static final String ES_INDEX = "twitter";
-	private static final String ES_INDEX_TYPE = "tweets";
+	private static final String ES_INDEX = "instagram";
+	private static final String ES_INDEX_TYPE = "posts";
 
 	private LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> forwarder;
 	private Properties kafkaConfigs;

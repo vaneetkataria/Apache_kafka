@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 public class LiveTweetsStreamKafkaConsumerConfig {
 
 	private static String BOOTSTRAP_SERVERS_CONFIG = "127.0.0.1:9092";
-	private static String GROUP_ID_CONFIG = "javacode";
+	private static String GROUP_ID_CONFIG = "twitterstream";
 
 	public static Properties get() {
 		// kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092
@@ -44,26 +44,26 @@ public class LiveTweetsStreamKafkaConsumerConfig {
 		// At least 2048 bytes should be present on server to return the response other
 		// wise consumer will wait .
 		// This will improve throughput at cost of some latency.
-		consumerConfigs.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 2 * 1024);
+		consumerConfigs.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 500 * 1024);
 		// this much milliseconds server will wait to send empty data if
 		// FETCH_MIN_BYTES_CONFIG requirement is not fulfilled .
-		consumerConfigs.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 2000);
+		consumerConfigs.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 5000);
 		// Max 2 MB will be returned from single partition in one poll.
-		consumerConfigs.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 10 * 1024 * 1024);
+		consumerConfigs.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 25 * 1024 * 1024);
 		// 50 MB default value .Maximum 50 MB of data will only be returned in one poll
 		// request.
 		consumerConfigs.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 70 * 1024 * 1024);
 
 		// Max records to be returned in a single poll call .
-		consumerConfigs.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 100);
+		consumerConfigs.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 200);
 		// All consumer present in consumer group send heart beat to consumer
 		// coordinator (In broker nodes )for their liveliness every
 		// HEARTBEAT_INTERVAL_MS_CONFIG milliseconds . This second should be 1/3 of
 		// SESSION_TIMEOUT_MS_CONFIG as a guideline.
-		consumerConfigs.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, 5);
+		consumerConfigs.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, 2 * 1000);
 		// If no heart beat is received from any consumer in group till 15 ms then re
 		// balance will be initiated .
-		consumerConfigs.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 15);
+		consumerConfigs.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 61100);
 		// If consumer didn't put any poll request till 10 sec rebalnce will happen .
 		consumerConfigs.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 10 * 60 * 1000);
 
