@@ -3,21 +3,28 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.katariasoft.technologies</groupId>
 	<artifactId>TweetsProducer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<project.main.class>com.katariasoft.technologies.kafka.producer.twitter.producer.LiveTweetsStreamKafkaProducer</project.main.class>
+	</properties>
+
+	<parent>
+		<groupId>com.katariasoft.technologies</groupId>
+		<artifactId>LiveTweetsStreamPubSubParent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
 	<!-- Kafka Client dependency -->
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
-			<version>2.0.0</version>
 		</dependency>
 
 		<!-- Slf4J dependency -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.25</version>
 		</dependency>
 
 
@@ -25,14 +32,46 @@
 		<dependency>
 			<groupId>com.twitter</groupId>
 			<artifactId>hbc-core</artifactId>
-			<version>2.2.0</version>
 		</dependency>
 
 
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+			</plugin>
 
+			<!--There are many ways for creating an executable jar in maven by various 
+				plugins -->
+			<!-- . 1. Create a jar file with main-class and class path attribute with 
+				maven jar plugin -->
+			<!-- 2. Copy all dependencies into class path folder defined in previous 
+				plugin with maven copy resources plugin. -->
+			<!-- Below two plugins do the same . -->
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+
+			<!-- Below defined is maven one jar plugin . -->
+			<!-- It simply asks for main class and creates a jar with its own custom 
+				class loaders . -->
+			<!-- With this jar all dependent libraries will be present in main jar 
+				only . -->
+			<plugin>
+				<groupId>com.jolira</groupId>
+				<artifactId>onejar-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
