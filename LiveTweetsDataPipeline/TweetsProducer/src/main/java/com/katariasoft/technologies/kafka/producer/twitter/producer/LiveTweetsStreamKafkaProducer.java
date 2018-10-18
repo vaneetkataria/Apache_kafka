@@ -18,7 +18,7 @@ public class LiveTweetsStreamKafkaProducer {
 		// kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic new_test_topic
 		// Creating properties for kafka Producer.
 		// interested tweet terms
-		tweetTerms = Arrays.asList("WorldFoodDay");
+		tweetTerms = Arrays.asList("is");
 		// kafka configs
 		kafkaConfigs = TweetsGethrerKafkaProducerConfig.get();
 

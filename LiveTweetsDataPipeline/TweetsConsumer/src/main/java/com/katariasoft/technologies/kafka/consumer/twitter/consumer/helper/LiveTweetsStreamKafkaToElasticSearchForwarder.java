@@ -108,7 +108,10 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 		// duplication of data should not happen in elastic
 		// search.
 		request.id(record.topic() + "_" + record.partition() + "_" + record.offset());
-		request.source(record.value(), XContentType.JSON);
+		 request.source(record.value(), XContentType.JSON);
+		// This JSON string is for testing purpose only.
+		//request.source("{\"a\":\"b\"}", XContentType.JSON);
+
 		bulkRequest.add(request);
 	}
 
