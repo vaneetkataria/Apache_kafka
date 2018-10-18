@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+
 import com.katariasoft.technologies.kafka.producer.util.Assert;
 
 public class CallbackNativeKafkaProducer<K, V> {
