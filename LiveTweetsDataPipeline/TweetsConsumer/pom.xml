@@ -1,18 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.katariasoft.technologies</groupId>
-	<artifactId>TweetsProducer</artifactId>
-
-	<properties>
-		<project.main.class>com.katariasoft.technologies.kafka.producer.twitter.producer.LiveTweetsStreamKafkaProducer</project.main.class>
-	</properties>
+	<artifactId>TweetsConsumer</artifactId>
 
 	<parent>
 		<groupId>com.katariasoft.technologies</groupId>
-		<artifactId>LiveTweetsStreamPubSubParent</artifactId>
+		<artifactId>LiveTweetsStreamPubsubParent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+
+	<properties>
+		<project.main.class>com.katariasoft.technologies.kafka.consumer.twitter.consumer.LiveTweetsKafkaToElasticSearchPipeline</project.main.class>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.katariasoft.technologies</groupId>
+				<artifactId>LiveTweetsStreamPubSubDependencies</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 
 	<!-- Kafka Client dependency -->
 	<dependencies>
@@ -27,17 +39,15 @@
 			<artifactId>slf4j-simple</artifactId>
 		</dependency>
 
-
-		<!-- Twitter client dependency -->
+		<!-- elastic search client dependency -->
 		<dependency>
-			<groupId>com.twitter</groupId>
-			<artifactId>hbc-core</artifactId>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>elasticsearch-rest-high-level-client</artifactId>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
