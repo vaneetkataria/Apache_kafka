@@ -6,13 +6,13 @@ import com.katariasoft.technologies.kafka.consumer.twitter.consumer.config.LiveT
 import com.katariasoft.technologies.kafka.consumer.twitter.consumer.helper.LiveTweetsStreamKafkaToElasticSearchForwarder;
 import com.katariasoft.technologies.kafka.consumer.util.Assert;
 
-public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
+public class LiveTweetsKafkaToElasticSearchPipeline {
 
 	private static final String TOPIC = "twitterstream";
 	private static final String ES_INDEX = "medium";
 	private static final String ES_INDEX_TYPE = "posts";
 
-	private LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> forwarder;
+	private LiveTweetsStreamKafkaToElasticSearchForwarder forwarder;
 	private Properties kafkaConfigs;
 	private String topic;
 	private String esIndex;
@@ -28,8 +28,8 @@ public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
 		this.topic = topic;
 		this.esIndex = esIndex;
 		this.esIndexType = esIndex;
-		forwarder = new LiveTweetsStreamKafkaToElasticSearchForwarder<>(LiveTweetsStreamKafkaConsumerConfig.get(),
-				topic, esIndex, esIndexType);
+		forwarder = new LiveTweetsStreamKafkaToElasticSearchForwarder(LiveTweetsStreamKafkaConsumerConfig.get(), topic,
+				esIndex, esIndexType);
 	}
 
 	public void start() {
@@ -38,7 +38,7 @@ public class LiveTweetsKafkaToElasticSearchPipeline<K, V> {
 
 	public static void main(String args[]) {
 		try {
-			LiveTweetsKafkaToElasticSearchPipeline<String, String> pipeline = new LiveTweetsKafkaToElasticSearchPipeline<>(
+			LiveTweetsKafkaToElasticSearchPipeline pipeline = new LiveTweetsKafkaToElasticSearchPipeline(
 					LiveTweetsStreamKafkaConsumerConfig.get(), TOPIC, ES_INDEX, ES_INDEX_TYPE);
 			pipeline.start();
 		} catch (Exception e) {

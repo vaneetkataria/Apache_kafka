@@ -26,9 +26,9 @@ import com.katariasoft.technologies.kafka.consumer.util.Assert;
  * @param <K>
  * @param <V>
  */
-public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements StreamForwarder {
+public class LiveTweetsStreamKafkaToElasticSearchForwarder implements StreamForwarder {
 
-	private NativeKafkaConsumer<K, V> nativeKafkaConsumer;
+	private NativeKafkaConsumer<String, String> nativeKafkaConsumer;
 	private RestHighLevelClient elasticSerachClient;
 	private String esIndex;
 	private String esIndexType;
@@ -62,10 +62,10 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 
 	private void processSingleDataBatch() {
 		try {
-			ConsumerRecords<K, V> consumerRecords = nativeKafkaConsumer.poll(100);
+			ConsumerRecords<String, String> consumerRecords = nativeKafkaConsumer.poll(100);
 			if (Objects.nonNull(consumerRecords) && !consumerRecords.isEmpty()) {
 				BulkRequest bulkRequest = new BulkRequest();
-				for (ConsumerRecord<K, V> record : consumerRecords) {
+				for (ConsumerRecord<String, String> record : consumerRecords) {
 					logConsumedData(record);
 					if (Objects.nonNull(record)) {
 						addToBulkRequest(record, bulkRequest);
@@ -100,7 +100,7 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 		}
 	}
 
-	private void addToBulkRequest(ConsumerRecord<K, V> record, BulkRequest bulkRequest) {
+	private void addToBulkRequest(ConsumerRecord<String, String> record, BulkRequest bulkRequest) {
 		IndexRequest request = new IndexRequest(esIndex, esIndexType);
 		// To make consumer idempotent . As after processing completed data and just
 		// before committing offset if consumer died and when new consumer will be
@@ -108,9 +108,9 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 		// duplication of data should not happen in elastic
 		// search.
 		request.id(record.topic() + "_" + record.partition() + "_" + record.offset());
-		 request.source(record.value(), XContentType.JSON);
+		request.source(record.value(), XContentType.JSON);
 		// This JSON string is for testing purpose only.
-		//request.source("{\"a\":\"b\"}", XContentType.JSON);
+		// request.source("{\"a\":\"b\"}", XContentType.JSON);
 
 		bulkRequest.add(request);
 	}
@@ -126,7 +126,7 @@ public class LiveTweetsStreamKafkaToElasticSearchForwarder<K, V> implements Stre
 		}
 	}
 
-	private void logConsumedData(ConsumerRecord<K, V> record) {
+	private void logConsumedData(ConsumerRecord<String, String> record) {
 		System.out.println("topic : " + record.topic() + "\n");
 		System.out.println("partition : " + record.partition() + "\n");
 		System.out.println("offset: " + record.offset() + "\n");
